@@ -1,0 +1,4 @@
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+vip.aevlp.disruptor.spring.boot.DisruptorAutoConfiguration,\
+vip.aevlp.disruptor.spring.boot.RingBufferAutoConfiguration
