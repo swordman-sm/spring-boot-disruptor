@@ -2,10 +2,10 @@ package vip.aevlp.disruptor.spring.boot.event.handler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import vip.aevlp.disruptor.spring.boot.event.DisruptorEvent;
+import vip.aevlp.disruptor.spring.boot.event.DisruptorEventT;
 import vip.aevlp.disruptor.spring.boot.event.handler.chain.HandlerChain;
 
-public abstract class AbstractEnabledEventHandler<T extends DisruptorEvent> extends AbstractNameableEventHandler<T> {
+public abstract class AbstractEnabledEventHandler<T extends DisruptorEventT> extends AbstractNameableEventHandler<T> {
 
 	private final Logger LOG = LoggerFactory.getLogger(AbstractEnabledEventHandler.class);
 	boolean enabled = true;

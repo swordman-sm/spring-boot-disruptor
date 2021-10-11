@@ -18,9 +18,9 @@ spring:
     multi-producer: false
     ring-buffer-size: 1024
     ring-thread-numbers:  4
-#    handler-definitions:
-#      - /Event-DC-Output/TagA-Output/** = emailHandler
-#      - /Event-DC-Output/TagB-Output/** = smsHandler
+    handler-definitions:
+      - /Event-DC-Output/TagA-Output/** = emailHandler
+      - /Event-DC-Output/TagB-Output/** = smsHandler
 
 #日志级别
 logging:

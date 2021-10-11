@@ -19,16 +19,19 @@ package vip.aevlp.disruptor.spring.boot.context;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import vip.aevlp.disruptor.spring.boot.context.event.DisruptorEventPublisher;
+import vip.aevlp.disruptor.spring.boot.context.event.DisruptorEventProducer;
 import vip.aevlp.disruptor.spring.boot.event.DisruptorApplicationEvent;
-import vip.aevlp.disruptor.spring.boot.event.DisruptorEvent;
+import vip.aevlp.disruptor.spring.boot.event.DisruptorEventT;
 
-public class DisruptorApplicationContext implements ApplicationContextAware, DisruptorEventPublisher {
+/**
+ * @author Steve
+ */
+public class DisruptorApplicationContext implements ApplicationContextAware, DisruptorEventProducer {
 
     private ApplicationContext applicationContext;
 
     @Override
-    public void publishEvent(DisruptorEvent event) {
+    public void publishEvent(DisruptorEventT event) {
         applicationContext.publishEvent(new DisruptorApplicationEvent(event));
     }
 

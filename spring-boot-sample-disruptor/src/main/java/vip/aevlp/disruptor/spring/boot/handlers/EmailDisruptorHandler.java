@@ -16,13 +16,13 @@
 package vip.aevlp.disruptor.spring.boot.handlers;
 
 import org.springframework.stereotype.Component;
-import vip.aevlp.disruptor.spring.boot.annotation.EventRule;
+import vip.aevlp.disruptor.spring.boot.annotation.DisruptorMapping;
 import vip.aevlp.disruptor.spring.boot.event.DisruptorBindEvent;
 import vip.aevlp.disruptor.spring.boot.event.handler.DisruptorHandler;
 import vip.aevlp.disruptor.spring.boot.event.handler.chain.HandlerChain;
 
 
-@EventRule("/Event-Output/TagA-Output/**")
+@DisruptorMapping(router = "/Event-Output/TagA-Output/**")
 @Component("emailHandler")
 public class EmailDisruptorHandler implements DisruptorHandler<DisruptorBindEvent> {
 

@@ -19,15 +19,18 @@ package vip.aevlp.disruptor.spring.boot.context.event;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.beans.factory.InitializingBean;
-import vip.aevlp.disruptor.spring.boot.event.DisruptorEvent;
+import vip.aevlp.disruptor.spring.boot.event.DisruptorEventT;
 
 import java.lang.reflect.Constructor;
 
-public class EventPublicationInterceptor implements MethodInterceptor, DisruptorEventPublisherAware, InitializingBean {
+/**
+ * @author Steve
+ */
+public class EventPublicationInterceptor implements MethodInterceptor, DisruptorEventProducerAware, InitializingBean {
 
     private Constructor<?> applicationEventClassConstructor;
 
-    private DisruptorEventPublisher applicationEventPublisher;
+    private DisruptorEventProducer applicationEventPublisher;
 
 
     /**
@@ -42,7 +45,7 @@ public class EventPublicationInterceptor implements MethodInterceptor, Disruptor
      *                                  if it does not expose a constructor that takes a single {@code Object} argument
      */
     public void setApplicationEventClass(Class<?> applicationEventClass) {
-        if (DisruptorEvent.class == applicationEventClass || !DisruptorEvent.class.isAssignableFrom(applicationEventClass)) {
+        if (DisruptorEventT.class == applicationEventClass || !DisruptorEventT.class.isAssignableFrom(applicationEventClass)) {
             throw new IllegalArgumentException("applicationEventClass needs to extend DisruptorEvent");
         }
         try {
@@ -54,7 +57,7 @@ public class EventPublicationInterceptor implements MethodInterceptor, Disruptor
     }
 
     @Override
-    public void setDisruptorEventPublisher(DisruptorEventPublisher applicationEventPublisher) {
+    public void setDisruptorEventPublisher(DisruptorEventProducer applicationEventPublisher) {
         this.applicationEventPublisher = applicationEventPublisher;
     }
 
@@ -68,7 +71,7 @@ public class EventPublicationInterceptor implements MethodInterceptor, Disruptor
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
         Object retVal = invocation.proceed();
-        DisruptorEvent event = (DisruptorEvent) this.applicationEventClassConstructor.newInstance(new Object[]{invocation.getThis()});
+        DisruptorEventT event = (DisruptorEventT) this.applicationEventClassConstructor.newInstance(new Object[]{invocation.getThis()});
         this.applicationEventPublisher.publishEvent(event);
         return retVal;
     }

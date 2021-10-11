@@ -1,18 +1,20 @@
 package vip.aevlp.disruptor.spring.boot;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import vip.aevlp.disruptor.spring.boot.config.EventHandlerDefinition;
+import vip.aevlp.disruptor.spring.boot.config.RouterHandler;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @ConfigurationProperties(DisruptorProperties.PREFIX)
+@Data
 public class DisruptorProperties {
 
     public static final String PREFIX = "spring.disruptor";
 
     /**
-     * Enable Disruptor.
+     * 启用Disruptor开关
      */
     private boolean enabled = false;
     /**
@@ -28,60 +30,13 @@ public class DisruptorProperties {
      */
     private int ringThreadNumbers = 4;
     /**
-     * 是否对生产者，如果是则通过 RingBuffer.createMultiProducer创建一个多生产者的RingBuffer，否则通过RingBuffer.createSingleProducer创建一个单生产者的RingBuffer
+     * 是否对生产者，如果是则通过 RingBuffer.createMultiProducer创建一个多生产者的RingBuffer，
+     * 否则通过RingBuffer.createSingleProducer创建一个单生产者的RingBuffer
      */
     private boolean multiProducer = false;
     /**
-     * 消息出来责任链
+     * 声明Ant风格路径及对应处理的handler
      */
-    private List<EventHandlerDefinition> handlerDefinitions = new ArrayList<EventHandlerDefinition>();
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public boolean isRingBuffer() {
-        return ringBuffer;
-    }
-
-    public void setRingBuffer(boolean ringBuffer) {
-        this.ringBuffer = ringBuffer;
-    }
-
-    public boolean isMultiProducer() {
-        return multiProducer;
-    }
-
-    public void setMultiProducer(boolean multiProducer) {
-        this.multiProducer = multiProducer;
-    }
-
-    public int getRingBufferSize() {
-        return ringBufferSize;
-    }
-
-    public void setRingBufferSize(int ringBufferSize) {
-        this.ringBufferSize = ringBufferSize;
-    }
-
-    public int getRingThreadNumbers() {
-        return ringThreadNumbers;
-    }
-
-    public void setRingThreadNumbers(int ringThreadNumbers) {
-        this.ringThreadNumbers = ringThreadNumbers;
-    }
-
-    public List<EventHandlerDefinition> getHandlerDefinitions() {
-        return handlerDefinitions;
-    }
-
-    public void setHandlerDefinitions(List<EventHandlerDefinition> handlerDefinitions) {
-        this.handlerDefinitions = handlerDefinitions;
-    }
+    private List<RouterHandler> handlerDefinitions = new ArrayList<RouterHandler>();
 
 }

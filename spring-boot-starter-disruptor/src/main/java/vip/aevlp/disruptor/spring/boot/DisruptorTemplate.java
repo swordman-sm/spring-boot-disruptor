@@ -19,14 +19,14 @@ import com.lmax.disruptor.EventTranslatorOneArg;
 import com.lmax.disruptor.dsl.Disruptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import vip.aevlp.disruptor.spring.boot.event.DisruptorBindEvent;
-import vip.aevlp.disruptor.spring.boot.event.DisruptorEvent;
+import vip.aevlp.disruptor.spring.boot.event.DisruptorEventT;
 
 public class DisruptorTemplate {
 
     @Autowired
-    protected Disruptor<DisruptorEvent> disruptor;
+    protected Disruptor<DisruptorEventT> disruptor;
     @Autowired
-    protected EventTranslatorOneArg<DisruptorEvent, DisruptorEvent> oneArgEventTranslator;
+    protected EventTranslatorOneArg<DisruptorEventT, DisruptorEventT> oneArgEventTranslator;
 
     public void publishEvent(DisruptorBindEvent event) {
         disruptor.publishEvent(oneArgEventTranslator, event);

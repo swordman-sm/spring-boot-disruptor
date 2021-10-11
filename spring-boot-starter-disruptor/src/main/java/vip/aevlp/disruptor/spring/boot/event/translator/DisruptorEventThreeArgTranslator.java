@@ -16,12 +16,12 @@
 package vip.aevlp.disruptor.spring.boot.event.translator;
 
 import com.lmax.disruptor.EventTranslatorThreeArg;
-import vip.aevlp.disruptor.spring.boot.event.DisruptorEvent;
+import vip.aevlp.disruptor.spring.boot.event.DisruptorEventT;
 
-public class DisruptorEventThreeArgTranslator implements EventTranslatorThreeArg<DisruptorEvent, String, String, String> {
+public class DisruptorEventThreeArgTranslator implements EventTranslatorThreeArg<DisruptorEventT, String, String, String> {
 
     @Override
-    public void translateTo(DisruptorEvent dtEevent, long sequence, String event, String tag, String key) {
+    public void translateTo(DisruptorEventT dtEevent, long sequence, String event, String tag, String key) {
         dtEevent.setEvent(event);
         dtEevent.setTag(tag);
         dtEevent.setKey(key);

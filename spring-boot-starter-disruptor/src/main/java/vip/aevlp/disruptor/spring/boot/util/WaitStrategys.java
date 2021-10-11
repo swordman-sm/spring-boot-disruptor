@@ -15,12 +15,15 @@ public class WaitStrategys {
     public static WaitStrategy SLEEPING_WAIT = new SleepingWaitStrategy();
 
     /**
-     * YieldingWaitStrategy是可以被用在低延迟系统中的两个策略之一，这种策略在减低系统延迟的同时也会增加CPU运算量。YieldingWaitStrategy策略会循环等待sequence增加到合适的值。循环中调用Thread.yield()允许其他准备好的线程执行。如果需要高性能而且事件消费者线程比逻辑内核少的时候，推荐使用YieldingWaitStrategy策略。例如：在开启超线程的时候。
+     * YieldingWaitStrategy是可以被用在低延迟系统中的两个策略之一，这种策略在减低系统延迟的同时也会增加CPU运算量。
+     * YieldingWaitStrategy策略会循环等待sequence增加到合适的值。循环中调用Thread.yield()允许其他准备好的线程执行。
+     * 如果需要高性能而且事件消费者线程比逻辑内核少的时候，推荐使用YieldingWaitStrategy策略。例如：在开启超线程的时候。
      */
     public static WaitStrategy YIELDING_WAIT = new YieldingWaitStrategy();
 
     /**
-     * BusySpinWaitStrategy是性能最高的等待策略，同时也是对部署环境要求最高的策略。这个性能最好用在事件处理线程比物理内核数目还要小的时候。例如：在禁用超线程技术的时候。
+     * BusySpinWaitStrategy是性能最高的等待策略，同时也是对部署环境要求最高的策略。
+     * 这个性能最好用在事件处理线程比物理内核数目还要小的时候。例如：在禁用超线程技术的时候。
      */
     public static WaitStrategy BUSYSPIN_WAIT = new BusySpinWaitStrategy();
 

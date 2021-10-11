@@ -1,13 +1,13 @@
 package vip.aevlp.disruptor.spring.boot.hooks;
 
 import com.lmax.disruptor.dsl.Disruptor;
-import vip.aevlp.disruptor.spring.boot.event.DisruptorEvent;
+import vip.aevlp.disruptor.spring.boot.event.DisruptorEventT;
 
 public class DisruptorShutdownHook extends Thread {
 
-    private Disruptor<DisruptorEvent> disruptor;
+    private Disruptor<DisruptorEventT> disruptor;
 
-    public DisruptorShutdownHook(Disruptor<DisruptorEvent> disruptor) {
+    public DisruptorShutdownHook(Disruptor<DisruptorEventT> disruptor) {
         this.disruptor = disruptor;
     }
 

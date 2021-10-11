@@ -1,9 +1,9 @@
 package vip.aevlp.disruptor.spring.boot.event.handler;
 
 
-import vip.aevlp.disruptor.spring.boot.event.DisruptorEvent;
+import vip.aevlp.disruptor.spring.boot.event.DisruptorEventT;
 
-public abstract class AbstractNameableEventHandler<T extends DisruptorEvent> implements DisruptorHandler<T>, Nameable {
+public abstract class AbstractNameableEventHandler<T extends DisruptorEventT> implements DisruptorHandler<T>, Nameable {
 
 	/**
 	 * 过滤器名称

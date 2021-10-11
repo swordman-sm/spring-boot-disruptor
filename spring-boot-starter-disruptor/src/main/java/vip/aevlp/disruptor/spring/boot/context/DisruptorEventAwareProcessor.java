@@ -23,7 +23,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.support.SecurityContextProvider;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import vip.aevlp.disruptor.spring.boot.context.event.DisruptorEventPublisherAware;
+import vip.aevlp.disruptor.spring.boot.context.event.DisruptorEventProducerAware;
 
 import java.security.AccessControlContext;
 import java.security.AccessController;
@@ -78,7 +78,7 @@ public class DisruptorEventAwareProcessor implements ApplicationContextAware, Be
     @Override
     public Object postProcessBeforeInitialization(final Object bean, String beanName) throws BeansException {
         AccessControlContext acc = null;
-        if (System.getSecurityManager() != null && (bean instanceof DisruptorEventPublisherAware)) {
+        if (System.getSecurityManager() != null && (bean instanceof DisruptorEventProducerAware)) {
             acc = getAccessControlContext();
         }
         if (acc != null) {
@@ -99,8 +99,8 @@ public class DisruptorEventAwareProcessor implements ApplicationContextAware, Be
     private void invokeAwareInterfaces(Object bean) {
         if (bean instanceof Aware) {
             //扩展 DisruptorEventPublisherAware
-            if (bean instanceof DisruptorEventPublisherAware) {
-                DisruptorEventPublisherAware awareBean = (DisruptorEventPublisherAware) bean;
+            if (bean instanceof DisruptorEventProducerAware) {
+                DisruptorEventProducerAware awareBean = (DisruptorEventProducerAware) bean;
                 awareBean.setDisruptorEventPublisher(this.disruptorContext);
             }
         }

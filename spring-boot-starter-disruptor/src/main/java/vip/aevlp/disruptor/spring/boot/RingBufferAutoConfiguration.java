@@ -12,7 +12,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import vip.aevlp.disruptor.spring.boot.event.DisruptorEvent;
+import vip.aevlp.disruptor.spring.boot.event.DisruptorEventT;
 import vip.aevlp.disruptor.spring.boot.event.factory.DisruptorBindEventFactory;
 import vip.aevlp.disruptor.spring.boot.event.handler.DisruptorEventDispatcher;
 import vip.aevlp.disruptor.spring.boot.util.WaitStrategys;
@@ -42,7 +42,7 @@ public class RingBufferAutoConfiguration implements ApplicationContextAware {
 
     @Bean
     @ConditionalOnMissingBean
-    public EventFactory<DisruptorEvent> eventFactory() {
+    public EventFactory<DisruptorEventT> eventFactory() {
         return new DisruptorBindEventFactory();
     }
 
@@ -66,8 +66,8 @@ public class RingBufferAutoConfiguration implements ApplicationContextAware {
     @Bean
     @ConditionalOnClass({RingBuffer.class})
     @ConditionalOnProperty(prefix = DisruptorProperties.PREFIX, value = "ring-buffer", havingValue = "true")
-    public RingBuffer<DisruptorEvent> ringBuffer(DisruptorProperties properties, WaitStrategy waitStrategy,
-                                                 EventFactory<DisruptorEvent> eventFactory,
+    public RingBuffer<DisruptorEventT> ringBuffer(DisruptorProperties properties, WaitStrategy waitStrategy,
+                                                 EventFactory<DisruptorEventT> eventFactory,
                                                  @Autowired(required = false) DisruptorEventDispatcher preEventHandler,
                                                  @Autowired(required = false) DisruptorEventDispatcher postEventHandler) {
         // http://blog.csdn.net/a314368439/article/details/72642653?utm_source=itdadao&utm_medium=referral
@@ -78,7 +78,7 @@ public class RingBufferAutoConfiguration implements ApplicationContextAware {
          * 第二个参数是RingBuffer的大小，它必须是2的指数倍 目的是为了将求模运算转为&运算提高效率
          * 第三个参数是RingBuffer的生产都在没有可用区块的时候(可能是消费者（或者说是事件处理器） 太慢了)的等待策略
          */
-        RingBuffer<DisruptorEvent> ringBuffer = null;
+        RingBuffer<DisruptorEventT> ringBuffer = null;
         if (properties.isMultiProducer()) {
             // RingBuffer.createMultiProducer创建一个多生产者的RingBuffer
             ringBuffer = RingBuffer.createMultiProducer(eventFactory, properties.getRingBufferSize(), waitStrategy);
@@ -92,7 +92,7 @@ public class RingBufferAutoConfiguration implements ApplicationContextAware {
             // 创建SequenceBarrier
             SequenceBarrier sequenceBarrier = ringBuffer.newBarrier();
             // 创建消息处理器
-            BatchEventProcessor<DisruptorEvent> transProcessor = new BatchEventProcessor<DisruptorEvent>(ringBuffer,
+            BatchEventProcessor<DisruptorEventT> transProcessor = new BatchEventProcessor<DisruptorEventT>(ringBuffer,
                     sequenceBarrier, preEventHandler);
             // 这一部的目的是让RingBuffer根据消费者的状态 如果只有一个消费者的情况可以省略
             ringBuffer.addGatingSequences(transProcessor.getSequence());

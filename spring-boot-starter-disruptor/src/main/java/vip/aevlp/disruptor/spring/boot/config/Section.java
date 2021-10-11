@@ -25,7 +25,7 @@ public class Section implements Map<String, String> {
             throw new NullPointerException("name");
         }
         this.name = name;
-        this.props = new LinkedHashMap<String, String>();
+        this.props = new LinkedHashMap<>();
     }
 
     Section(String name, String sectionContent) {
