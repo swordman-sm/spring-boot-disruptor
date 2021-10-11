@@ -28,6 +28,10 @@ public class DisruptorEventOneArgTranslator implements EventTranslatorOneArg<Dis
         event.setEvent(bind.getEvent());
         event.setTag(bind.getTag());
         event.setKey(StringUtils.hasText(bind.getKey()) ? bind.getKey() : String.valueOf(sequence));
+//        event.setBody(bind.getBody());
+        System.err.println("==========================");
+        System.err.println(event);
+
         if (event instanceof DisruptorBindEvent) {
             DisruptorBindEvent bindEvent = (DisruptorBindEvent) event;
             bindEvent.bind(bind);

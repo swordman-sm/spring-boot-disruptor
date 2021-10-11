@@ -98,6 +98,6 @@ public abstract class DisruptorEvent extends EventObject {
                 ", tag='" + tag + '\'' +
                 ", key='" + key + '\'' +
                 ", body=" + body +
-                "} " + super.toString();
+                '}';
     }
 }

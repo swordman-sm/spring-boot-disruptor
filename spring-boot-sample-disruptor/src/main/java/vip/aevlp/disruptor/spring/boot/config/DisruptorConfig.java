@@ -27,33 +27,35 @@ import vip.aevlp.disruptor.spring.boot.event.DisruptorBindEvent;
 @EnableScheduling
 public class DisruptorConfig {
 
-	@Autowired	
-	protected DisruptorTemplate disruptorTemplate;
+    @Autowired
+    protected DisruptorTemplate disruptorTemplate;
 
-//	@Scheduled(fixedDelay = 1000) // 每1s执行1次
-	public void send() throws Exception {
-		
-		DisruptorBindEvent event = new DisruptorBindEvent(this, "message " + Math.random());
-		
-		event.setEvent("Event-Output");
-		event.setTag("TagA-Output");
-		event.setKey("id-" + Math.random());
-		
-		disruptorTemplate.publishEvent(event);
-		
-	}
-	
-	@Scheduled(fixedDelay = 1000) // 每1s执行1次
-	public void send2() throws Exception {
-		
-		DisruptorBindEvent event = new DisruptorBindEvent(this, "message " + Math.random());
-		
-		event.setEvent("Event-Output");
-		event.setTag("TagB-Output");
-		event.setKey("id-" + Math.random());
-		
-		disruptorTemplate.publishEvent(event);
-		
-	}
-	
+    @Scheduled(fixedDelay = 1000)
+    public void send() throws Exception {
+
+        DisruptorBindEvent event = new DisruptorBindEvent(this, "message " + Math.random());
+
+        event.setEvent("Event-Output");
+        event.setTag("TagA-Output");
+        event.setKey("aid-" + Math.random());
+        event.setBody(2333);
+        System.err.println(event);
+        disruptorTemplate.publishEvent(event);
+
+    }
+
+    @Scheduled(fixedDelay = 1000)
+    public void send2() throws Exception {
+
+        DisruptorBindEvent event = new DisruptorBindEvent(this, "message " + Math.random());
+
+        event.setEvent("Event-Output");
+        event.setTag("TagB-Output");
+        event.setKey("bid-" + Math.random());
+        event.setBody(2333);
+        System.err.println(event);
+        disruptorTemplate.publishEvent(event);
+
+    }
+
 }

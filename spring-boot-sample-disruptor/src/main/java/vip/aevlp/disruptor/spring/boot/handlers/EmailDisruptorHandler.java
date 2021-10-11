@@ -26,9 +26,9 @@ import vip.aevlp.disruptor.spring.boot.event.handler.chain.HandlerChain;
 @Component("emailHandler")
 public class EmailDisruptorHandler implements DisruptorHandler<DisruptorBindEvent> {
 
-	@Override
-	public void doHandler(DisruptorBindEvent event, HandlerChain<DisruptorBindEvent> handlerChain) throws Exception {
-		System.out.println(event.toString());
-	}
+    @Override
+    public void doHandler(DisruptorBindEvent event, HandlerChain<DisruptorBindEvent> handlerChain) throws Exception {
+        System.out.println("emailHandler: " + event.toString());
+    }
 
 }
