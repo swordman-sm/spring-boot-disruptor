@@ -1,12 +1,12 @@
 package vip.aevlp.disruptor.spring.boot.event.handler.chain;
 
 
-import vip.aevlp.disruptor.spring.boot.event.DisruptorEventT;
+import vip.aevlp.disruptor.spring.boot.event.DisruptorEvent;
 
 /**
  * @author Steve
  */
-public interface HandlerChain<T extends DisruptorEventT> {
+public interface HandlerChain<T extends DisruptorEvent> {
 
     /**
      * @param event

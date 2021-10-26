@@ -26,7 +26,7 @@ import vip.aevlp.disruptor.spring.boot.config.Init;
 import vip.aevlp.disruptor.spring.boot.config.Section;
 import vip.aevlp.disruptor.spring.boot.context.DisruptorEventAwareProcessor;
 import vip.aevlp.disruptor.spring.boot.event.DisruptorApplicationEvent;
-import vip.aevlp.disruptor.spring.boot.event.DisruptorEventT;
+import vip.aevlp.disruptor.spring.boot.event.DisruptorEvent;
 import vip.aevlp.disruptor.spring.boot.event.factory.DisruptorBindEventFactory;
 import vip.aevlp.disruptor.spring.boot.event.factory.DisruptorEventThreadFactory;
 import vip.aevlp.disruptor.spring.boot.event.handler.DisruptorEventDispatcher;
@@ -80,7 +80,7 @@ public class DisruptorAutoConfiguration implements ApplicationContextAware {
 
     @Bean
     @ConditionalOnMissingBean
-    public EventFactory<DisruptorEventT> eventFactory() {
+    public EventFactory<DisruptorEvent> eventFactory() {
         return new DisruptorBindEventFactory();
     }
 
@@ -88,9 +88,9 @@ public class DisruptorAutoConfiguration implements ApplicationContextAware {
      * Handler实现集合
      */
     @Bean("disruptorHandlers")
-    public Map<String, DisruptorHandler<DisruptorEventT>> disruptorHandlers() {
+    public Map<String, DisruptorHandler<DisruptorEvent>> disruptorHandlers() {
 
-        Map<String, DisruptorHandler<DisruptorEventT>> disruptorPreHandlers = new LinkedHashMap<>();
+        Map<String, DisruptorHandler<DisruptorEvent>> disruptorPreHandlers = new LinkedHashMap<>();
 
         Map<String, DisruptorHandler> beansOfType = getApplicationContext().getBeansOfType(DisruptorHandler.class);
         if (!ObjectUtils.isEmpty(beansOfType)) {
@@ -122,7 +122,7 @@ public class DisruptorAutoConfiguration implements ApplicationContextAware {
      */
     @Bean("disruptorEventHandlers")
     public List<DisruptorEventDispatcher> disruptorEventHandlers(DisruptorProperties properties,
-                                                                 @Qualifier("disruptorHandlers") Map<String, DisruptorHandler<DisruptorEventT>> eventHandlers) {
+                                                                 @Qualifier("disruptorHandlers") Map<String, DisruptorHandler<DisruptorEvent>> eventHandlers) {
         // 获取定义 拦截链规则
         List<RouterHandler> handlerDefinitions = properties.getHandlerDefinitions();
         // 拦截器集合
@@ -157,7 +157,7 @@ public class DisruptorAutoConfiguration implements ApplicationContextAware {
      * 构造DisruptorEventHandler
      */
     private DisruptorEventDispatcher createDisruptorEventHandler(RouterHandler handlerDefinition,
-                                                                 Map<String, DisruptorHandler<DisruptorEventT>> eventHandlers) {
+                                                                 Map<String, DisruptorHandler<DisruptorEvent>> eventHandlers) {
 
         if (StringUtils.isNotEmpty(handlerDefinition.getRouters())) {
             handlerChainDefinitionMap.putAll(this.parseHandlerChainDefinitions(handlerDefinition.getRouters()));
@@ -165,7 +165,7 @@ public class DisruptorAutoConfiguration implements ApplicationContextAware {
             handlerChainDefinitionMap.putAll(handlerDefinition.getDefinitionMap());
         }
 
-        HandlerChainManager<DisruptorEventT> manager = createHandlerChainManager(eventHandlers, handlerChainDefinitionMap);
+        HandlerChainManager<DisruptorEvent> manager = createHandlerChainManager(eventHandlers, handlerChainDefinitionMap);
         PathMatchingHandlerChainResolver chainResolver = new PathMatchingHandlerChainResolver();
         chainResolver.setHandlerChainManager(manager);
         return new DisruptorEventDispatcher(chainResolver, handlerDefinition.getOrder());
@@ -181,15 +181,15 @@ public class DisruptorAutoConfiguration implements ApplicationContextAware {
         return section;
     }
 
-    private HandlerChainManager<DisruptorEventT> createHandlerChainManager(
-            Map<String, DisruptorHandler<DisruptorEventT>> eventHandlers,
+    private HandlerChainManager<DisruptorEvent> createHandlerChainManager(
+            Map<String, DisruptorHandler<DisruptorEvent>> eventHandlers,
             Map<String, String> handlerChainDefinitionMap) {
 
-        HandlerChainManager<DisruptorEventT> manager = new DefaultHandlerChainManager();
+        HandlerChainManager<DisruptorEvent> manager = new DefaultHandlerChainManager();
         if (!CollectionUtils.isEmpty(eventHandlers)) {
-            for (Entry<String, DisruptorHandler<DisruptorEventT>> entry : eventHandlers.entrySet()) {
+            for (Entry<String, DisruptorHandler<DisruptorEvent>> entry : eventHandlers.entrySet()) {
                 String name = entry.getKey();
-                DisruptorHandler<DisruptorEventT> handler = entry.getValue();
+                DisruptorHandler<DisruptorEvent> handler = entry.getValue();
                 if (handler instanceof Nameable) {
                     ((Nameable) handler).setName(name);
                 }
@@ -229,22 +229,22 @@ public class DisruptorAutoConfiguration implements ApplicationContextAware {
     @Bean
     @ConditionalOnClass({Disruptor.class})
     @ConditionalOnProperty(prefix = DisruptorProperties.PREFIX, value = "enabled", havingValue = "true")
-    public Disruptor<DisruptorEventT> disruptor(
+    public Disruptor<DisruptorEvent> disruptor(
             DisruptorProperties properties,
             WaitStrategy waitStrategy,
             ThreadFactory threadFactory,
-            EventFactory<DisruptorEventT> eventFactory,
+            EventFactory<DisruptorEvent> eventFactory,
             @Qualifier("disruptorEventHandlers")
                     List<DisruptorEventDispatcher> disruptorEventHandlers) {
 
         // http://blog.csdn.net/a314368439/article/details/72642653?utm_source=itdadao&utm_medium=referral
 
-        Disruptor<DisruptorEventT> disruptor = null;
+        Disruptor<DisruptorEvent> disruptor = null;
         if (properties.isMultiProducer()) {
-            disruptor = new Disruptor<DisruptorEventT>(eventFactory, properties.getRingBufferSize(), threadFactory,
+            disruptor = new Disruptor<>(eventFactory, properties.getRingBufferSize(), threadFactory,
                     ProducerType.MULTI, waitStrategy);
         } else {
-            disruptor = new Disruptor<DisruptorEventT>(eventFactory, properties.getRingBufferSize(), threadFactory,
+            disruptor = new Disruptor<>(eventFactory, properties.getRingBufferSize(), threadFactory,
                     ProducerType.SINGLE, waitStrategy);
         }
 
@@ -254,7 +254,7 @@ public class DisruptorAutoConfiguration implements ApplicationContextAware {
             Collections.sort(disruptorEventHandlers, new OrderComparator());
 
             // 使用disruptor创建消费者组
-            EventHandlerGroup<DisruptorEventT> handlerGroup = null;
+            EventHandlerGroup<DisruptorEvent> handlerGroup = null;
             for (int i = 0; i < disruptorEventHandlers.size(); i++) {
                 // 连接消费事件方法，其中EventHandler的是为消费者消费消息的实现类
                 DisruptorEventDispatcher eventHandler = disruptorEventHandlers.get(i);
@@ -282,19 +282,19 @@ public class DisruptorAutoConfiguration implements ApplicationContextAware {
 
     @Bean
     @ConditionalOnMissingBean
-    public EventTranslatorOneArg<DisruptorEventT, DisruptorEventT> oneArgEventTranslator() {
+    public EventTranslatorOneArg<DisruptorEvent, DisruptorEvent> oneArgEventTranslator() {
         return new DisruptorEventOneArgTranslator();
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public EventTranslatorTwoArg<DisruptorEventT, String, String> twoArgEventTranslator() {
+    public EventTranslatorTwoArg<DisruptorEvent, String, String> twoArgEventTranslator() {
         return new DisruptorEventTwoArgTranslator();
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public EventTranslatorThreeArg<DisruptorEventT, String, String, String> threeArgEventTranslator() {
+    public EventTranslatorThreeArg<DisruptorEvent, String, String, String> threeArgEventTranslator() {
         return new DisruptorEventThreeArgTranslator();
     }
 
@@ -304,16 +304,11 @@ public class DisruptorAutoConfiguration implements ApplicationContextAware {
     }
 
     @Bean
-    public ApplicationListener<DisruptorApplicationEvent> disruptorEventListener(Disruptor<DisruptorEventT> disruptor,
-                                                                                 EventTranslatorOneArg<DisruptorEventT, DisruptorEventT> oneArgEventTranslator) {
-        return new ApplicationListener<DisruptorApplicationEvent>() {
-
-            @Override
-            public void onApplicationEvent(DisruptorApplicationEvent appEvent) {
-                DisruptorEventT event = (DisruptorEventT) appEvent.getSource();
-                disruptor.publishEvent(oneArgEventTranslator, event);
-            }
-
+    public ApplicationListener<DisruptorApplicationEvent> disruptorEventListener(Disruptor<DisruptorEvent> disruptor,
+                                                                                 EventTranslatorOneArg<DisruptorEvent, DisruptorEvent> oneArgEventTranslator) {
+        return appEvent -> {
+            DisruptorEvent event = (DisruptorEvent) appEvent.getSource();
+            disruptor.publishEvent(oneArgEventTranslator, event);
         };
     }
 

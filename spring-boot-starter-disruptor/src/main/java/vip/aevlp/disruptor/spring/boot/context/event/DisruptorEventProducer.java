@@ -16,7 +16,7 @@
 package vip.aevlp.disruptor.spring.boot.context.event;
 
 
-import vip.aevlp.disruptor.spring.boot.event.DisruptorEventT;
+import vip.aevlp.disruptor.spring.boot.event.DisruptorEvent;
 
 /**
  * @author Steve
@@ -28,6 +28,6 @@ public interface DisruptorEventProducer {
      *
      * @param event
      */
-    void publishEvent(DisruptorEventT event);
+    void publishEvent(DisruptorEvent event);
 
 }

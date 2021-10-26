@@ -3,67 +3,56 @@ package vip.aevlp.disruptor.spring.boot.event;
 import java.util.EventObject;
 
 /**
- * 事件(Event) 就是通过 Disruptor 进行交换的数据类型。
+ * Disruptor消息封装实体
  */
-@SuppressWarnings("serial")
-public abstract class DisruptorEvent extends EventObject {
+public abstract class DisruptorEvent<T> extends EventObject {
 
     /**
-     * System time when the event happened
+     * 时间戳
      */
     private final long timestamp;
     /**
-     * Event Name
+     * 消息主题
      */
-    private String event;
+    private String topic;
     /**
-     * Event Tag
+     * 消息标签
      */
     private String tag;
     /**
-     * Event Keys
+     * 消息key
      */
     private String key;
     /**
-     * Event body
+     * 消息体
      */
-    private Object body;
+    private T body;
 
-    /**
-     * Create a new ConsumeEvent.
-     *
-     * @param source the object on which the event initially occurred (never {@code null})
-     */
     public DisruptorEvent(Object source) {
         super(source);
         this.timestamp = System.currentTimeMillis();
     }
 
-    /**
-     * Return the system time in milliseconds when the event happened.
-     *
-     * @return system time in milliseconds
-     */
-    public final long getTimestamp() {
-        return this.timestamp;
-    }
-
     public String getRouteExpression() {
-        return "/" + getEvent() + "/" + getTag() + "/" +
+        return "/" + getTopic() + "/" + getTag() + "/" +
                 getKey();
 
     }
 
-    public void setSource(Object source) {
+    public void setSource(Object object) {
         this.source = source;
     }
 
-    public String getEvent() {
-        return event;
+    public long getTimestamp() {
+        return timestamp;
     }
 
-    public void setEvent(String event) {
-        this.event = event;
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 
     public String getTag() {
@@ -82,11 +71,11 @@ public abstract class DisruptorEvent extends EventObject {
         this.key = key;
     }
 
-    public Object getBody() {
+    public T getBody() {
         return body;
     }
 
-    public void setBody(Object body) {
+    public void setBody(T body) {
         this.body = body;
     }
 
@@ -94,7 +83,7 @@ public abstract class DisruptorEvent extends EventObject {
     public String toString() {
         return "DisruptorEvent{" +
                 "timestamp=" + timestamp +
-                ", event='" + event + '\'' +
+                ", topic='" + topic + '\'' +
                 ", tag='" + tag + '\'' +
                 ", key='" + key + '\'' +
                 ", body=" + body +

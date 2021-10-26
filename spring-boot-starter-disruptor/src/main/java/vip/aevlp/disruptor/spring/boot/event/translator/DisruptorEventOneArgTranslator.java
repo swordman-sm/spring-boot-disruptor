@@ -17,15 +17,15 @@ package vip.aevlp.disruptor.spring.boot.event.translator;
 
 import com.lmax.disruptor.EventTranslatorOneArg;
 import vip.aevlp.disruptor.spring.boot.event.DisruptorBindEvent;
-import vip.aevlp.disruptor.spring.boot.event.DisruptorEventT;
+import vip.aevlp.disruptor.spring.boot.event.DisruptorEvent;
 import vip.aevlp.disruptor.spring.boot.util.StringUtils;
 
-public class DisruptorEventOneArgTranslator implements EventTranslatorOneArg<DisruptorEventT, DisruptorEventT> {
+public class DisruptorEventOneArgTranslator implements EventTranslatorOneArg<DisruptorEvent, DisruptorEvent> {
 
     @Override
-    public void translateTo(DisruptorEventT event, long sequence, DisruptorEventT bind) {
+    public void translateTo(DisruptorEvent event, long sequence, DisruptorEvent bind) {
         event.setSource(bind.getSource());
-        event.setEvent(bind.getEvent());
+        event.setTopic(bind.getTopic());
         event.setTag(bind.getTag());
         event.setKey(StringUtils.hasText(bind.getKey()) ? bind.getKey() : String.valueOf(sequence));
 //        event.setBody(bind.getBody());

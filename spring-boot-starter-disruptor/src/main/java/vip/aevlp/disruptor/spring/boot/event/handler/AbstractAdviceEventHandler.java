@@ -2,10 +2,10 @@ package vip.aevlp.disruptor.spring.boot.event.handler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import vip.aevlp.disruptor.spring.boot.event.DisruptorEventT;
+import vip.aevlp.disruptor.spring.boot.event.DisruptorEvent;
 import vip.aevlp.disruptor.spring.boot.event.handler.chain.HandlerChain;
 
-public class AbstractAdviceEventHandler<T extends DisruptorEventT> extends AbstractEnabledEventHandler<T> {
+public class AbstractAdviceEventHandler<T extends DisruptorEvent> extends AbstractEnabledEventHandler<T> {
 
 	private final Logger LOG = LoggerFactory.getLogger(AbstractAdviceEventHandler.class);
 	

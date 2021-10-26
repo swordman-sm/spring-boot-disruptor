@@ -1,7 +1,7 @@
 package vip.aevlp.disruptor.spring.boot.event.handler.chain;
 
 
-import vip.aevlp.disruptor.spring.boot.event.DisruptorEventT;
+import vip.aevlp.disruptor.spring.boot.event.DisruptorEvent;
 import vip.aevlp.disruptor.spring.boot.event.handler.DisruptorHandler;
 import vip.aevlp.disruptor.spring.boot.event.handler.NamedHandlerList;
 
@@ -13,7 +13,7 @@ import java.util.Set;
  *
  * @author Steve
  */
-public interface HandlerChainManager<T extends DisruptorEventT> {
+public interface HandlerChainManager<T extends DisruptorEvent> {
 
     /**
      * 获取所有HandlerChain

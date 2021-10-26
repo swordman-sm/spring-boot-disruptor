@@ -1,7 +1,7 @@
 package vip.aevlp.disruptor.spring.boot.event.handler;
 
 
-import vip.aevlp.disruptor.spring.boot.event.DisruptorEventT;
+import vip.aevlp.disruptor.spring.boot.event.DisruptorEvent;
 import vip.aevlp.disruptor.spring.boot.event.handler.chain.HandlerChain;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * @author Steve
  */
-public interface NamedHandlerList<T extends DisruptorEventT> extends List<DisruptorHandler<T>> {
+public interface NamedHandlerList<T extends DisruptorEvent> extends List<DisruptorHandler<T>> {
 
     /**
      * Returns the configuration-unique name assigned to this {@code Handler} list.

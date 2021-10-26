@@ -2,15 +2,15 @@ package vip.aevlp.disruptor.spring.boot.event.factory;
 
 import com.lmax.disruptor.EventFactory;
 import vip.aevlp.disruptor.spring.boot.event.DisruptorBindEvent;
-import vip.aevlp.disruptor.spring.boot.event.DisruptorEventT;
+import vip.aevlp.disruptor.spring.boot.event.DisruptorEvent;
 
 /**
  * @author Steve
  */
-public class DisruptorBindEventFactory implements EventFactory<DisruptorEventT> {
+public class DisruptorBindEventFactory implements EventFactory<DisruptorEvent> {
 
     @Override
-    public DisruptorEventT newInstance() {
+    public DisruptorEvent newInstance() {
         return new DisruptorBindEvent(this);
     }
 

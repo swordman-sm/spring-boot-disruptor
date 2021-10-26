@@ -19,7 +19,7 @@ package vip.aevlp.disruptor.spring.boot.context.event;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.beans.factory.InitializingBean;
-import vip.aevlp.disruptor.spring.boot.event.DisruptorEventT;
+import vip.aevlp.disruptor.spring.boot.event.DisruptorEvent;
 
 import java.lang.reflect.Constructor;
 
@@ -45,7 +45,7 @@ public class EventPublicationInterceptor implements MethodInterceptor, Disruptor
      *                                  if it does not expose a constructor that takes a single {@code Object} argument
      */
     public void setApplicationEventClass(Class<?> applicationEventClass) {
-        if (DisruptorEventT.class == applicationEventClass || !DisruptorEventT.class.isAssignableFrom(applicationEventClass)) {
+        if (DisruptorEvent.class == applicationEventClass || !DisruptorEvent.class.isAssignableFrom(applicationEventClass)) {
             throw new IllegalArgumentException("applicationEventClass needs to extend DisruptorEvent");
         }
         try {
@@ -71,7 +71,7 @@ public class EventPublicationInterceptor implements MethodInterceptor, Disruptor
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
         Object retVal = invocation.proceed();
-        DisruptorEventT event = (DisruptorEventT) this.applicationEventClassConstructor.newInstance(new Object[]{invocation.getThis()});
+        DisruptorEvent event = (DisruptorEvent) this.applicationEventClassConstructor.newInstance(new Object[]{invocation.getThis()});
         this.applicationEventPublisher.publishEvent(event);
         return retVal;
     }

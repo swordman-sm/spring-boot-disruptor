@@ -1,7 +1,7 @@
 package vip.aevlp.disruptor.spring.boot.event.handler.chain.def;
 
 import org.apache.commons.lang3.StringUtils;
-import vip.aevlp.disruptor.spring.boot.event.DisruptorEventT;
+import vip.aevlp.disruptor.spring.boot.event.DisruptorEvent;
 import vip.aevlp.disruptor.spring.boot.event.handler.DisruptorHandler;
 import vip.aevlp.disruptor.spring.boot.event.handler.NamedHandlerList;
 import vip.aevlp.disruptor.spring.boot.event.handler.chain.HandlerChain;
@@ -9,17 +9,17 @@ import vip.aevlp.disruptor.spring.boot.event.handler.chain.ProxiedHandlerChain;
 
 import java.util.*;
 
-public class DefaultNamedHandlerList implements NamedHandlerList<DisruptorEventT> {
+public class DefaultNamedHandlerList implements NamedHandlerList<DisruptorEvent> {
 
     private String name;
 
-    private List<DisruptorHandler<DisruptorEventT>> backingList;
+    private List<DisruptorHandler<DisruptorEvent>> backingList;
 
     DefaultNamedHandlerList(String name) {
-        this(name, new ArrayList<DisruptorHandler<DisruptorEventT>>());
+        this(name, new ArrayList<DisruptorHandler<DisruptorEvent>>());
     }
 
-    DefaultNamedHandlerList(String name, List<DisruptorHandler<DisruptorEventT>> backingList) {
+    DefaultNamedHandlerList(String name, List<DisruptorHandler<DisruptorEvent>> backingList) {
         if (backingList == null) {
             throw new NullPointerException("backingList constructor argument cannot be null.");
         }
@@ -40,7 +40,7 @@ public class DefaultNamedHandlerList implements NamedHandlerList<DisruptorEventT
     }
 
     @Override
-    public HandlerChain<DisruptorEventT> proxy(HandlerChain<DisruptorEventT> handlerChain) {
+    public HandlerChain<DisruptorEvent> proxy(HandlerChain<DisruptorEvent> handlerChain) {
         return new ProxiedHandlerChain((ProxiedHandlerChain) handlerChain, this);
     }
 
@@ -60,7 +60,7 @@ public class DefaultNamedHandlerList implements NamedHandlerList<DisruptorEventT
     }
 
     @Override
-    public Iterator<DisruptorHandler<DisruptorEventT>> iterator() {
+    public Iterator<DisruptorHandler<DisruptorEvent>> iterator() {
         return this.backingList.iterator();
     }
 
@@ -75,7 +75,7 @@ public class DefaultNamedHandlerList implements NamedHandlerList<DisruptorEventT
     }
 
     @Override
-    public boolean add(DisruptorHandler<DisruptorEventT> e) {
+    public boolean add(DisruptorHandler<DisruptorEvent> e) {
         return this.backingList.add(e);
     }
 
@@ -90,12 +90,12 @@ public class DefaultNamedHandlerList implements NamedHandlerList<DisruptorEventT
     }
 
     @Override
-    public boolean addAll(Collection<? extends DisruptorHandler<DisruptorEventT>> c) {
+    public boolean addAll(Collection<? extends DisruptorHandler<DisruptorEvent>> c) {
         return this.backingList.addAll(c);
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends DisruptorHandler<DisruptorEventT>> c) {
+    public boolean addAll(int index, Collection<? extends DisruptorHandler<DisruptorEvent>> c) {
         return this.backingList.addAll(index, c);
     }
 
@@ -115,22 +115,22 @@ public class DefaultNamedHandlerList implements NamedHandlerList<DisruptorEventT
     }
 
     @Override
-    public DisruptorHandler<DisruptorEventT> get(int index) {
+    public DisruptorHandler<DisruptorEvent> get(int index) {
         return this.backingList.get(index);
     }
 
     @Override
-    public DisruptorHandler<DisruptorEventT> set(int index, DisruptorHandler<DisruptorEventT> element) {
+    public DisruptorHandler<DisruptorEvent> set(int index, DisruptorHandler<DisruptorEvent> element) {
         return this.backingList.set(index, element);
     }
 
     @Override
-    public void add(int index, DisruptorHandler<DisruptorEventT> element) {
+    public void add(int index, DisruptorHandler<DisruptorEvent> element) {
         this.backingList.add(index, element);
     }
 
     @Override
-    public DisruptorHandler<DisruptorEventT> remove(int index) {
+    public DisruptorHandler<DisruptorEvent> remove(int index) {
         return this.backingList.remove(index);
     }
 
@@ -145,17 +145,17 @@ public class DefaultNamedHandlerList implements NamedHandlerList<DisruptorEventT
     }
 
     @Override
-    public ListIterator<DisruptorHandler<DisruptorEventT>> listIterator() {
+    public ListIterator<DisruptorHandler<DisruptorEvent>> listIterator() {
         return this.backingList.listIterator();
     }
 
     @Override
-    public ListIterator<DisruptorHandler<DisruptorEventT>> listIterator(int index) {
+    public ListIterator<DisruptorHandler<DisruptorEvent>> listIterator(int index) {
         return this.backingList.listIterator(index);
     }
 
     @Override
-    public List<DisruptorHandler<DisruptorEventT>> subList(int fromIndex, int toIndex) {
+    public List<DisruptorHandler<DisruptorEvent>> subList(int fromIndex, int toIndex) {
         return this.backingList.subList(fromIndex, toIndex);
     }
 

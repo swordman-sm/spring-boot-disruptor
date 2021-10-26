@@ -4,18 +4,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
-import vip.aevlp.disruptor.spring.boot.event.DisruptorEventT;
+import vip.aevlp.disruptor.spring.boot.event.DisruptorEvent;
 import vip.aevlp.disruptor.spring.boot.event.handler.chain.HandlerChain;
 import vip.aevlp.disruptor.spring.boot.event.handler.chain.HandlerChainManager;
 import vip.aevlp.disruptor.spring.boot.event.handler.chain.HandlerChainResolver;
 
-public class PathMatchingHandlerChainResolver implements HandlerChainResolver<DisruptorEventT> {
+public class PathMatchingHandlerChainResolver implements HandlerChainResolver<DisruptorEvent> {
 
     private static final Logger log = LoggerFactory.getLogger(PathMatchingHandlerChainResolver.class);
     /**
      * handlerChain管理器
      */
-    private HandlerChainManager<DisruptorEventT> handlerChainManager;
+    private HandlerChainManager<DisruptorEvent> handlerChainManager;
 
     /**
      * 路径匹配器
@@ -27,11 +27,11 @@ public class PathMatchingHandlerChainResolver implements HandlerChainResolver<Di
         this.handlerChainManager = new DefaultHandlerChainManager();
     }
 
-    private HandlerChainManager<DisruptorEventT> getHandlerChainManager() {
+    private HandlerChainManager<DisruptorEvent> getHandlerChainManager() {
         return handlerChainManager;
     }
 
-    public void setHandlerChainManager(HandlerChainManager<DisruptorEventT> handlerChainManager) {
+    public void setHandlerChainManager(HandlerChainManager<DisruptorEvent> handlerChainManager) {
         this.handlerChainManager = handlerChainManager;
     }
 
@@ -45,8 +45,8 @@ public class PathMatchingHandlerChainResolver implements HandlerChainResolver<Di
 
 
     @Override
-    public HandlerChain<DisruptorEventT> getChain(DisruptorEventT event, HandlerChain<DisruptorEventT> originalChain) {
-        HandlerChainManager<DisruptorEventT> handlerChainManager = getHandlerChainManager();
+    public HandlerChain<DisruptorEvent> getChain(DisruptorEvent event, HandlerChain<DisruptorEvent> originalChain) {
+        HandlerChainManager<DisruptorEvent> handlerChainManager = getHandlerChainManager();
         if (!handlerChainManager.hasChains()) {
             return null;
         }
@@ -68,7 +68,7 @@ public class PathMatchingHandlerChainResolver implements HandlerChainResolver<Di
         return pathMatcher.match(pattern, path);
     }
 
-    private String getPathWithinEvent(DisruptorEventT event) {
+    private String getPathWithinEvent(DisruptorEvent event) {
         return event.getRouteExpression();
     }
 

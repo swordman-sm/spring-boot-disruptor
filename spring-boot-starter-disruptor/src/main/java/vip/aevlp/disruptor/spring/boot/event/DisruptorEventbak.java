@@ -3,10 +3,10 @@ package vip.aevlp.disruptor.spring.boot.event;
 import java.util.EventObject;
 
 /**
- * Disruptor消息封装实体
+ * 事件(Event) 就是通过 Disruptor 进行交换的数据类型。
  */
 @SuppressWarnings("serial")
-public abstract class DisruptorEventT<T> extends EventObject {
+public abstract class DisruptorEventbak extends EventObject {
 
     /**
      * System time when the event happened
@@ -27,14 +27,14 @@ public abstract class DisruptorEventT<T> extends EventObject {
     /**
      * Event body
      */
-    private T body;
+    private Object body;
 
     /**
      * Create a new ConsumeEvent.
      *
      * @param source the object on which the event initially occurred (never {@code null})
      */
-    public DisruptorEventT(Object source) {
+    public DisruptorEventbak(Object source) {
         super(source);
         this.timestamp = System.currentTimeMillis();
     }
@@ -82,11 +82,11 @@ public abstract class DisruptorEventT<T> extends EventObject {
         this.key = key;
     }
 
-    public T getBody() {
+    public Object getBody() {
         return body;
     }
 
-    public void setBody(T body) {
+    public void setBody(Object body) {
         this.body = body;
     }
 

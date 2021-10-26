@@ -16,7 +16,7 @@
 package vip.aevlp.disruptor.spring.boot.event;
 
 @SuppressWarnings("serial")
-public class DisruptorRefreshedEvent extends DisruptorEventT {
+public class DisruptorRefreshedEvent extends DisruptorEvent {
 
     public DisruptorRefreshedEvent(Object source) {
         super(source);

@@ -21,7 +21,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import vip.aevlp.disruptor.spring.boot.context.event.DisruptorEventProducer;
 import vip.aevlp.disruptor.spring.boot.event.DisruptorApplicationEvent;
-import vip.aevlp.disruptor.spring.boot.event.DisruptorEventT;
+import vip.aevlp.disruptor.spring.boot.event.DisruptorEvent;
 
 /**
  * @author Steve
@@ -31,7 +31,7 @@ public class DisruptorApplicationContext implements ApplicationContextAware, Dis
     private ApplicationContext applicationContext;
 
     @Override
-    public void publishEvent(DisruptorEventT event) {
+    public void publishEvent(DisruptorEvent event) {
         applicationContext.publishEvent(new DisruptorApplicationEvent(event));
     }
 

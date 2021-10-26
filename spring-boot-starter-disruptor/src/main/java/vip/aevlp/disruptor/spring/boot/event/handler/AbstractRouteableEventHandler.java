@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import vip.aevlp.disruptor.spring.boot.event.DisruptorEventT;
+import vip.aevlp.disruptor.spring.boot.event.DisruptorEvent;
 import vip.aevlp.disruptor.spring.boot.event.handler.chain.HandlerChain;
 import vip.aevlp.disruptor.spring.boot.event.handler.chain.HandlerChainResolver;
 import vip.aevlp.disruptor.spring.boot.exception.EventHandleException;
@@ -18,7 +18,7 @@ import java.io.IOException;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
-public class AbstractRouteableEventHandler<T extends DisruptorEventT> extends AbstractEnabledEventHandler<T> {
+public class AbstractRouteableEventHandler<T extends DisruptorEvent> extends AbstractEnabledEventHandler<T> {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractRouteableEventHandler.class);
 

@@ -4,7 +4,7 @@ package vip.aevlp.disruptor.spring.boot.event.handler.chain.def;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
-import vip.aevlp.disruptor.spring.boot.event.DisruptorEventT;
+import vip.aevlp.disruptor.spring.boot.event.DisruptorEvent;
 import vip.aevlp.disruptor.spring.boot.event.handler.DisruptorHandler;
 import vip.aevlp.disruptor.spring.boot.event.handler.Nameable;
 import vip.aevlp.disruptor.spring.boot.event.handler.NamedHandlerList;
@@ -17,13 +17,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class DefaultHandlerChainManager implements HandlerChainManager<DisruptorEventT> {
+public class DefaultHandlerChainManager implements HandlerChainManager<DisruptorEvent> {
 
     private static transient final Logger log = LoggerFactory.getLogger(DefaultHandlerChainManager.class);
 
-    private Map<String, DisruptorHandler<DisruptorEventT>> handlers;
+    private Map<String, DisruptorHandler<DisruptorEvent>> handlers;
 
-    private Map<String, NamedHandlerList<DisruptorEventT>> handlerChains;
+    private Map<String, NamedHandlerList<DisruptorEvent>> handlerChains;
 
     private final static String DEFAULT_CHAIN_DEFINATION_DELIMITER_CHAR = ",";
 
@@ -33,33 +33,33 @@ public class DefaultHandlerChainManager implements HandlerChainManager<Disruptor
     }
 
     @Override
-    public Map<String, DisruptorHandler<DisruptorEventT>> getHandlers() {
+    public Map<String, DisruptorHandler<DisruptorEvent>> getHandlers() {
         return handlers;
     }
 
-    public void setHandlers(Map<String, DisruptorHandler<DisruptorEventT>> handlers) {
+    public void setHandlers(Map<String, DisruptorHandler<DisruptorEvent>> handlers) {
         this.handlers = handlers;
     }
 
-    public Map<String, NamedHandlerList<DisruptorEventT>> getHandlerChains() {
+    public Map<String, NamedHandlerList<DisruptorEvent>> getHandlerChains() {
         return handlerChains;
     }
 
-    public void setHandlerChains(Map<String, NamedHandlerList<DisruptorEventT>> handlerChains) {
+    public void setHandlerChains(Map<String, NamedHandlerList<DisruptorEvent>> handlerChains) {
         this.handlerChains = handlerChains;
     }
 
-    public DisruptorHandler<DisruptorEventT> getHandler(String name) {
+    public DisruptorHandler<DisruptorEvent> getHandler(String name) {
         return this.handlers.get(name);
     }
 
     @Override
-    public void addHandler(String name, DisruptorHandler<DisruptorEventT> handler) {
+    public void addHandler(String name, DisruptorHandler<DisruptorEvent> handler) {
         addHandler(name, handler, true);
     }
 
-    protected void addHandler(String name, DisruptorHandler<DisruptorEventT> handler, boolean overwrite) {
-        DisruptorHandler<DisruptorEventT> existing = getHandler(name);
+    protected void addHandler(String name, DisruptorHandler<DisruptorEvent> handler, boolean overwrite) {
+        DisruptorHandler<DisruptorEvent> existing = getHandler(name);
         if (existing == null || overwrite) {
             if (handler instanceof Nameable) {
                 ((Nameable) handler).setName(name);
@@ -112,18 +112,18 @@ public class DefaultHandlerChainManager implements HandlerChainManager<Disruptor
         if (StringUtils.isBlank(chainName)) {
             throw new IllegalArgumentException("chainName cannot be null or empty.");
         }
-        DisruptorHandler<DisruptorEventT> handler = getHandler(handlerName);
+        DisruptorHandler<DisruptorEvent> handler = getHandler(handlerName);
         if (handler == null) {
             throw new IllegalArgumentException("There is no handler with name '" + handlerName +
                     "' to apply to chain [" + chainName + "] in the pool of available Handlers.  Ensure a " +
                     "handler with that name/path has first been registered with the addHandler method(s).");
         }
-        NamedHandlerList<DisruptorEventT> chain = ensureChain(chainName);
+        NamedHandlerList<DisruptorEvent> chain = ensureChain(chainName);
         chain.add(handler);
     }
 
-    private NamedHandlerList<DisruptorEventT> ensureChain(String chainName) {
-        NamedHandlerList<DisruptorEventT> chain = getChain(chainName);
+    private NamedHandlerList<DisruptorEvent> ensureChain(String chainName) {
+        NamedHandlerList<DisruptorEvent> chain = getChain(chainName);
         if (chain == null) {
             chain = new DefaultNamedHandlerList(chainName);
             this.handlerChains.put(chainName, chain);
@@ -132,7 +132,7 @@ public class DefaultHandlerChainManager implements HandlerChainManager<Disruptor
     }
 
     @Override
-    public NamedHandlerList<DisruptorEventT> getChain(String chainName) {
+    public NamedHandlerList<DisruptorEvent> getChain(String chainName) {
         return this.handlerChains.get(chainName);
     }
 
@@ -148,8 +148,8 @@ public class DefaultHandlerChainManager implements HandlerChainManager<Disruptor
     }
 
     @Override
-    public HandlerChain<DisruptorEventT> proxy(HandlerChain<DisruptorEventT> original, String chainName) {
-        NamedHandlerList<DisruptorEventT> configured = getChain(chainName);
+    public HandlerChain<DisruptorEvent> proxy(HandlerChain<DisruptorEvent> original, String chainName) {
+        NamedHandlerList<DisruptorEvent> configured = getChain(chainName);
         if (configured == null) {
             String msg = "There is no configured chain under the name/key [" + chainName + "].";
             throw new IllegalArgumentException(msg);
