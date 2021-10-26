@@ -19,7 +19,7 @@ package vip.aevlp.disruptor.spring.boot.event;
  * @author Steve
  */
 @SuppressWarnings("serial")
-public class DisruptorBindEvent extends DisruptorEvent {
+public class DisruptorBindEvent<T> extends DisruptorEvent<T> {
 
     /**
      * 当前事件绑定的数据对象

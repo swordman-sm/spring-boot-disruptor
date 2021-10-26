@@ -130,13 +130,13 @@ public class DisruptorAutoConfiguration implements ApplicationContextAware {
         // 未定义，则使用默认规则
         if (CollectionUtils.isEmpty(handlerDefinitions)) {
 
-            RouterHandler definition = new RouterHandler();
+            RouterHandler routerHandler = new RouterHandler();
 
-            definition.setOrder(0);
-            definition.setDefinitionMap(handlerChainDefinitionMap);
+            routerHandler.setOrder(0);
+            routerHandler.setDefinitionMap(handlerChainDefinitionMap);
 
             // 构造DisruptorEventHandler
-            disruptorEventHandlers.add(this.createDisruptorEventHandler(definition, eventHandlers));
+            disruptorEventHandlers.add(this.createDisruptorEventHandler(routerHandler, eventHandlers));
 
         } else {
             // 迭代拦截器规则
@@ -148,7 +148,7 @@ public class DisruptorAutoConfiguration implements ApplicationContextAware {
             }
         }
         // 进行排序
-        Collections.sort(disruptorEventHandlers, new OrderComparator());
+        disruptorEventHandlers.sort(new OrderComparator());
 
         return disruptorEventHandlers;
     }

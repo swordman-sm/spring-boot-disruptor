@@ -35,7 +35,7 @@ public class DisruptorConfig {
 
         DisruptorBindEvent event = new DisruptorBindEvent(this, "message " + Math.random());
 
-        event.setEvent("Event-Output");
+        event.setTopic("Event-Output");
         event.setTag("TagA-Output");
         event.setKey("aid-" + Math.random());
         event.setBody(2333);
@@ -49,7 +49,7 @@ public class DisruptorConfig {
 
         DisruptorBindEvent event = new DisruptorBindEvent(this, "message " + Math.random());
 
-        event.setEvent("Event-Output");
+        event.setTopic("Event-Output");
         event.setTag("TagB-Output");
         event.setKey("bid-" + Math.random());
         event.setBody(2333);
